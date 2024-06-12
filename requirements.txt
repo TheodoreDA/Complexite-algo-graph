@@ -1,0 +1,15 @@
+black
+graphviz
+ipdb
+isort
+jupyterlab
+matplotlib
+mypy
+networkx
+numpy
+pytest
+scikit-learn
+scipy
+snakeviz
+termcolor
+xarray
