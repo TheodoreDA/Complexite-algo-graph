@@ -1,28 +1,28 @@
 from typing import List
-import bisect
 
 def parcours(houses: List[float]) -> List[float]:
     houses.sort()
-    threshold = houses[0] * 0.40
+    THRESHOLD_PER = 0.40
+    threshold = -houses[0] * THRESHOLD_PER if -houses[0] > houses[-1] else houses[-1] * THRESHOLD_PER
     extrem_l = []
     core_l = []
     core_r = []
     extrem_r = []
 
     for house in houses:
-        if house > 0:
-            if house > abs(threshold):
-                bisect.insort(extrem_r, house)
+        if house < 0:
+            if house < -threshold:
+                extrem_l.append(house)
             else:
-                bisect.insort(core_r, house)
+                core_l.append(house)
         else:
-            if house < abs(threshold) * -1:
-                bisect.insort(extrem_l, house)
+            if house > threshold:
+                extrem_r.append(house)
             else:
-                bisect.insort(core_l, house)
+                core_r.append(house)
     
-    core_l.sort(reverse=True)
-    extrem_l.sort(reverse=True)
+    core_l = core_l[::-1]
+    extrem_l = extrem_l[::-1]
     return core_l + core_r + extrem_r + extrem_l
 
 def left_to_right(houses: List[float]) -> List[float]:
@@ -35,13 +35,12 @@ def right_to_left(houses: List[float]) -> List[float]:
 
 def closest(houses: List[float]) -> List[float]:
     res = []
-    houses.sort()
     houses_len = len(houses)
     curr_house = 0
 
     for _ in range (0, houses_len):
-        pos = bisect.bisect_left(houses, curr_house) - 1
-        res.append(houses[pos])
-        curr_house = houses[pos]
-        del houses[pos]
+        closest_house = min(houses, key=lambda x:abs(x-curr_house))
+        res.append(closest_house)
+        curr_house = closest_house
+        houses.remove(closest_house)
     return res
