@@ -1,5 +1,12 @@
 from typing import List
 
+"""     Personnal algorithm 
+    Split the houses in 4 sections:
+        2 clusters at the left and the right of the origin, combined, they take the majority of houses
+        2 sections at the extremes.
+    The idea is to tackle the core sections, and then go to the extreme. This works because it normally distributed.
+"""
+
 def parcours(houses: List[float]) -> List[float]:
     houses.sort()
     THRESHOLD_PER = 0.40
@@ -24,6 +31,9 @@ def parcours(houses: List[float]) -> List[float]:
     core_l = core_l[::-1]
     extrem_l = extrem_l[::-1]
     return core_l + core_r + extrem_r + extrem_l
+
+
+# Benchmark algorithms
 
 def left_to_right(houses: List[float]) -> List[float]:
     houses.sort()
