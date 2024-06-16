@@ -1,49 +1,47 @@
 import networkx as nx
 import random
 
-# Générer un graphe d'Erdős-Rényi
-n = 120
-p = 0.04
-graph = nx.gnp_random_graph(n, p)
+# Generate a random graph
+def generate_random_graph(num_nodes, p_edge):
+    return nx.gnp_random_graph(num_nodes, p_edge)
 
-# Heuristique du degré maximal
-def maximum_degree_matching(graph):
-    matching = set()
-    degrees = sorted(graph.degree(), key=lambda x: x[1], reverse=True)
-    matched_nodes = set()
-    
-    for node, degree in degrees:
-        if node not in matched_nodes:
-            neighbors = [n for n in graph.neighbors(node) if n not in matched_nodes]
+# Greedy degree-based matching heuristic
+def greedy_degree_matching(graph):
+    matching = []
+    nodes = sorted(graph.degree, key=lambda x: x[1], reverse=True)
+    used_nodes = set()
+    for node, _ in nodes:
+        if node not in used_nodes:
+            neighbors = set(graph.neighbors(node)) - used_nodes
             if neighbors:
-                match = random.choice(neighbors)
-                matching.add((node, match))
-                matched_nodes.add(node)
-                matched_nodes.add(match)
-    
+                match = random.choice(list(neighbors))
+                matching.append((node, match))
+                used_nodes.add(node)
+                used_nodes.add(match)
     return matching
 
-# Heuristique du degré minimal
-def minimum_degree_matching(graph):
-    matching = set()
-    degrees = sorted(graph.degree(), key=lambda x: x[1])
-    matched_nodes = set()
-    
-    for node, degree in degrees:
-        if node not in matched_nodes:
-            neighbors = [n for n in graph.neighbors(node) if n not in matched_nodes]
+# Random degree-based matching heuristic
+def random_degree_matching(graph):
+    matching = []
+    nodes = list(graph.nodes())
+    random.shuffle(nodes)
+    used_nodes = set()
+    for node in nodes:
+        if node not in used_nodes:
+            neighbors = set(graph.neighbors(node)) - used_nodes
             if neighbors:
-                match = random.choice(neighbors)
-                matching.add((node, match))
-                matched_nodes.add(node)
-                matched_nodes.add(match)
-    
+                match = random.choice(list(neighbors))
+                matching.append((node, match))
+                used_nodes.add(node)
+                used_nodes.add(match)
     return matching
 
-# Effectuer les correspondances
-max_degree_matching = maximum_degree_matching(graph)
-min_degree_matching = minimum_degree_matching(graph)
-
-# Comparer les performances (par exemple, la taille des correspondances)
-print(f"Taille de la correspondance maximale : {len(max_degree_matching)}")
-print(f"Taille de la correspondance minimale : {len(min_degree_matching)}")
+# Verify the correctness of the matching
+def verify_matching(graph, matching):
+    matched_nodes = set()
+    for u, v in matching:
+        if u in matched_nodes or v in matched_nodes or not graph.has_edge(u, v):
+            return False
+        matched_nodes.add(u)
+        matched_nodes.add(v)
+    return True
