@@ -1,4 +1,5 @@
-## Task 2: Choosing Binoms in a Company (Matching)
+## Choosing Binoms in a Company (Matching)
+
 
 ### Heuristic 1: Highest Degree First
 
