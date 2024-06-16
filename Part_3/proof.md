@@ -1,4 +1,4 @@
-### Task 3: Complexities
+## Complexities
 
 #### Function `function_t0`
 **Function Definition:**
