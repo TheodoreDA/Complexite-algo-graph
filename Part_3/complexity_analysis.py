@@ -6,9 +6,9 @@ from functions import function_t0, function_t1
 def measure_time(func, n_values):
     times = []
     for n in n_values:
-        start_time = time.time()
+        start_time = time.perf_counter()
         func(n)
-        elapsed_time = time.time() - start_time
+        elapsed_time = time.perf_counter() - start_time
         times.append(elapsed_time)
     return times
 
